@@ -1,0 +1,26 @@
+{
+    "actorSpecification": 1,
+    "name": "currency-exchange-mcp",
+    "title": "Currency Exchange & Crypto Rates MCP Server",
+    "description": "Real-time currency exchange rates and crypto prices via MCP tools. Convert between 60+ fiat currencies and 30+ cryptocurrencies with multi-source fallback and smart currency resolution.",
+    "version": "1.0",
+    "buildTag": "latest",
+    "usesStandbyMode": true,
+    "categories": ["DEVELOPER_TOOLS"],
+    "seoTitle": "Currency Exchange & Crypto Rates MCP Server - Real-Time Forex & Bitcoin Prices",
+    "seoDescription": "MCP server for real-time currency conversion, exchange rates, and historical data. Supports 60+ fiat currencies (USD, EUR, GBP, INR, AED) and 30+ cryptocurrencies (BTC, ETH, SOL). Multi-source fallback with zero API keys required. Pay-per-use pricing starting at $0.005.",
+    "meta": {
+        "templateId": "ts-mcp-empty",
+        "generatedBy": "claude-code"
+    },
+    "input": {
+        "title": "Actor input schema",
+        "description": "This Actor runs as an MCP server and does not require input.",
+        "type": "object",
+        "schemaVersion": 1,
+        "properties": {},
+        "required": []
+    },
+    "dockerfile": "../Dockerfile",
+    "webServerMcpPath": "/mcp"
+}

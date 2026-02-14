@@ -1,0 +1,22 @@
+{
+    "currency-convert": {
+        "eventTitle": "Currency conversion",
+        "eventDescription": "Converts an amount between fiat or cryptocurrency pairs",
+        "eventPriceUsd": 0.005
+    },
+    "batch-convert": {
+        "eventTitle": "Batch currency conversion",
+        "eventDescription": "Converts an amount to multiple target currencies in a single call",
+        "eventPriceUsd": 0.01
+    },
+    "exchange-rates": {
+        "eventTitle": "Exchange rates lookup",
+        "eventDescription": "Fetches current exchange rates for a base currency",
+        "eventPriceUsd": 0.005
+    },
+    "historical-rate": {
+        "eventTitle": "Historical rate lookup",
+        "eventDescription": "Fetches historical exchange rates for a specific date or date range",
+        "eventPriceUsd": 0.01
+    }
+}
