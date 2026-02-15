@@ -1,4 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { Actor } from 'apify';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { convertCurrency } from '../../src/providers/index.js';
+import { registerBatchConvert } from '../../src/tools/batch-convert.js';
+import { clearCache } from '../../src/utils/cache.js';
 
 vi.mock('../../src/providers/index.js', () => ({
     convertCurrency: vi.fn(),
@@ -15,11 +20,6 @@ vi.mock('apify', () => ({
         exit: vi.fn(),
     },
 }));
-
-import { Actor } from 'apify';
-import { convertCurrency } from '../../src/providers/index.js';
-import { registerBatchConvert } from '../../src/tools/batch-convert.js';
-import { clearCache } from '../../src/utils/cache.js';
 
 const mockConvert = vi.mocked(convertCurrency);
 const mockCharge = vi.mocked(Actor.charge);
@@ -61,7 +61,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 1000, from: 'USD', to: ['EUR', 'GBP', 'INR'],
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
 
@@ -84,7 +84,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 50, from: 'EUR', to: ['USD'],
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.conversions).toHaveLength(1);
@@ -112,7 +112,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'USD', to: ['EUR', 'EUR', 'euros'],
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.conversions).toHaveLength(1);
@@ -127,7 +127,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'USD', to: ['USD', 'EUR'],
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.conversions).toHaveLength(1);
@@ -137,7 +137,7 @@ describe('batch_convert tool', () => {
     it('returns error when all targets are same as source', async () => {
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'USD', to: ['USD', 'dollars'],
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('same as the source');
@@ -148,7 +148,7 @@ describe('batch_convert tool', () => {
     it('returns error on unknown currency in from', async () => {
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'FAKECOIN', to: ['USD'],
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Unknown currency');
@@ -157,7 +157,7 @@ describe('batch_convert tool', () => {
     it('returns error on unknown currency in targets', async () => {
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'USD', to: ['FAKECOIN'],
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Unknown currency');
@@ -176,7 +176,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 1000, from: 'USD', to: ['EUR', 'BTC'],
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.conversions).toHaveLength(2);
@@ -189,7 +189,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'USD', to: ['EUR'],
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('All providers failed');
@@ -203,7 +203,7 @@ describe('batch_convert tool', () => {
 
         const result = await tools.batch_convert.fn({
             amount: 100, from: 'USD', to: ['EUR'],
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.timestamp).toBeDefined();

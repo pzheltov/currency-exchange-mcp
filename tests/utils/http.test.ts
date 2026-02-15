@@ -1,4 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { gotScraping } from 'got-scraping';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { _resetRateLimiter,fetchPage } from '../../src/utils/http.js';
 
 vi.mock('got-scraping', () => ({
     gotScraping: vi.fn(),
@@ -8,10 +11,6 @@ vi.mock('apify', () => ({
     log: { warning: vi.fn(), info: vi.fn(), error: vi.fn() },
     Actor: { init: vi.fn(), charge: vi.fn(), exit: vi.fn() },
 }));
-
-import { gotScraping } from 'got-scraping';
-
-import { fetchPage, _resetRateLimiter } from '../../src/utils/http.js';
 
 const mockGotScraping = vi.mocked(gotScraping);
 

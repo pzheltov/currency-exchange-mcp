@@ -1,7 +1,11 @@
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { fileURLToPath } from 'node:url';
+
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { getFawazahmed0HistoricalRate,getFawazahmed0Rates } from '../../src/providers/fawazahmed0.js';
+import { fetchPage } from '../../src/utils/http.js';
 
 vi.mock('../../src/utils/http.js', () => ({
     fetchPage: vi.fn(),
@@ -12,12 +16,9 @@ vi.mock('apify', () => ({
     Actor: { init: vi.fn(), charge: vi.fn(), exit: vi.fn() },
 }));
 
-import { fetchPage } from '../../src/utils/http.js';
-import { getFawazahmed0Rates, getFawazahmed0HistoricalRate } from '../../src/providers/fawazahmed0.js';
-
 const mockFetchPage = vi.mocked(fetchPage);
 
-const fixturesDir = path.dirname(fileURLToPath(import.meta.url)) + '/../fixtures';
+const fixturesDir = `${path.dirname(fileURLToPath(import.meta.url))  }/../fixtures`;
 const fixture = JSON.parse(readFileSync(`${fixturesDir}/fawazahmed0-usd.json`, 'utf-8'));
 
 describe('getFawazahmed0Rates', () => {

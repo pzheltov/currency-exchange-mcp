@@ -1,7 +1,15 @@
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { fileURLToPath } from 'node:url';
+
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import {
+    getFrankfurterHistoricalRate,
+    getFrankfurterRates,
+    getFrankfurterTimeSeries,
+} from '../../src/providers/frankfurter.js';
+import { fetchPage } from '../../src/utils/http.js';
 
 vi.mock('../../src/utils/http.js', () => ({
     fetchPage: vi.fn(),
@@ -12,16 +20,9 @@ vi.mock('apify', () => ({
     Actor: { init: vi.fn(), charge: vi.fn(), exit: vi.fn() },
 }));
 
-import { fetchPage } from '../../src/utils/http.js';
-import {
-    getFrankfurterRates,
-    getFrankfurterHistoricalRate,
-    getFrankfurterTimeSeries,
-} from '../../src/providers/frankfurter.js';
-
 const mockFetchPage = vi.mocked(fetchPage);
 
-const fixturesDir = path.dirname(fileURLToPath(import.meta.url)) + '/../fixtures';
+const fixturesDir = `${path.dirname(fileURLToPath(import.meta.url))  }/../fixtures`;
 const latestFixture = JSON.parse(readFileSync(`${fixturesDir}/frankfurter-latest.json`, 'utf-8'));
 const historicalFixture = JSON.parse(readFileSync(`${fixturesDir}/frankfurter-historical.json`, 'utf-8'));
 const timeseriesFixture = JSON.parse(readFileSync(`${fixturesDir}/frankfurter-timeseries.json`, 'utf-8'));

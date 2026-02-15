@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it } from 'vitest';
 
-import { getCached, setCache, clearCache, cacheStats } from '../../src/utils/cache.js';
+import { cacheStats,clearCache, getCached, setCache } from '../../src/utils/cache.js';
 
 describe('cache', () => {
     beforeEach(() => {

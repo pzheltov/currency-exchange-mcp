@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { getCoinbaseRates } from '../../src/providers/coinbase.js';
+import { getCoinGeckoPrices } from '../../src/providers/coingecko.js';
+import { getExchangeRateApiRates } from '../../src/providers/exchangerate-api.js';
+import { getFawazahmed0HistoricalRate,getFawazahmed0Rates } from '../../src/providers/fawazahmed0.js';
+import { getFrankfurterHistoricalRate, getFrankfurterTimeSeries } from '../../src/providers/frankfurter.js';
+import { convertCurrency, getCurrentRate,getHistoricalRate, getRatesForBase } from '../../src/providers/index.js';
+import { clearCache } from '../../src/utils/cache.js';
 
 vi.mock('../../src/providers/exchangerate-api.js', () => ({
     getExchangeRateApiRates: vi.fn(),
@@ -27,14 +35,6 @@ vi.mock('apify', () => ({
     log: { warning: vi.fn(), info: vi.fn(), error: vi.fn() },
     Actor: { init: vi.fn(), charge: vi.fn(), exit: vi.fn() },
 }));
-
-import { getExchangeRateApiRates } from '../../src/providers/exchangerate-api.js';
-import { getFawazahmed0Rates, getFawazahmed0HistoricalRate } from '../../src/providers/fawazahmed0.js';
-import { getFrankfurterHistoricalRate, getFrankfurterTimeSeries } from '../../src/providers/frankfurter.js';
-import { getCoinbaseRates } from '../../src/providers/coinbase.js';
-import { getCoinGeckoPrices } from '../../src/providers/coingecko.js';
-import { convertCurrency, getRatesForBase, getHistoricalRate, getCurrentRate } from '../../src/providers/index.js';
-import { clearCache } from '../../src/utils/cache.js';
 
 const mockExchangeRateApi = vi.mocked(getExchangeRateApiRates);
 const mockFawazahmed0 = vi.mocked(getFawazahmed0Rates);

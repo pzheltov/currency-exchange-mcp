@@ -1,14 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect,it } from 'vitest';
 
 import {
-    resolveCurrency,
-    isFiat,
-    isCrypto,
-    isValidDate,
-    isNotFutureDate,
-    FIAT_CODES,
     CRYPTO_MAP,
     CURRENCY_ALIASES,
+    FIAT_CODES,
+    isCrypto,
+    isFiat,
+    isNotFutureDate,
+    isValidDate,
+    resolveCurrency,
 } from '../../src/utils/validation.js';
 
 describe('resolveCurrency', () => {

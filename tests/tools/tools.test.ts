@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { Actor } from 'apify';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { convertCurrency, getHistoricalRate,getRatesForBase } from '../../src/providers/index.js';
+import { registerConvertCurrency } from '../../src/tools/convert-currency.js';
+import { registerGetExchangeRates } from '../../src/tools/get-exchange-rates.js';
+import { registerGetHistoricalRate } from '../../src/tools/get-historical-rate.js';
+import { registerAllTools } from '../../src/tools/index.js';
+import { clearCache } from '../../src/utils/cache.js';
 
 vi.mock('../../src/providers/index.js', () => ({
     convertCurrency: vi.fn(),
@@ -23,14 +31,6 @@ vi.mock('apify', () => ({
         }),
     },
 }));
-
-import { Actor } from 'apify';
-import { convertCurrency, getRatesForBase, getHistoricalRate } from '../../src/providers/index.js';
-import { registerAllTools } from '../../src/tools/index.js';
-import { registerConvertCurrency } from '../../src/tools/convert-currency.js';
-import { registerGetExchangeRates } from '../../src/tools/get-exchange-rates.js';
-import { registerGetHistoricalRate } from '../../src/tools/get-historical-rate.js';
-import { clearCache } from '../../src/utils/cache.js';
 
 const mockConvert = vi.mocked(convertCurrency);
 const mockGetRates = vi.mocked(getRatesForBase);
@@ -84,7 +84,7 @@ describe('convert_currency tool', () => {
             inverseRate: 0.012031, timestamp: '2026-02-14T00:00:00Z', source: 'exchangerate-api', cached: false,
         });
 
-        const result = await tools.convert_currency.fn({ amount: 100, from: 'USD', to: 'INR' }) as { content: Array<{ text: string }> };
+        const result = await tools.convert_currency.fn({ amount: 100, from: 'USD', to: 'INR' }) as { content: { text: string }[] };
         const parsed = JSON.parse(result.content[0].text);
 
         expect(parsed.result).toBe(8312);
@@ -93,7 +93,7 @@ describe('convert_currency tool', () => {
     });
 
     it('handles same-currency conversion without API call', async () => {
-        const result = await tools.convert_currency.fn({ amount: 42, from: 'USD', to: 'usd' }) as { content: Array<{ text: string }> };
+        const result = await tools.convert_currency.fn({ amount: 42, from: 'USD', to: 'usd' }) as { content: { text: string }[] };
         const parsed = JSON.parse(result.content[0].text);
 
         expect(parsed.result).toBe(42);
@@ -114,7 +114,7 @@ describe('convert_currency tool', () => {
     });
 
     it('returns error on unknown currency', async () => {
-        const result = await tools.convert_currency.fn({ amount: 100, from: 'FAKECOIN', to: 'USD' }) as { isError: boolean; content: Array<{ text: string }> };
+        const result = await tools.convert_currency.fn({ amount: 100, from: 'FAKECOIN', to: 'USD' }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Unknown currency');
@@ -123,7 +123,7 @@ describe('convert_currency tool', () => {
     it('returns error on provider failure', async () => {
         mockConvert.mockRejectedValueOnce(new Error('All providers failed'));
 
-        const result = await tools.convert_currency.fn({ amount: 100, from: 'USD', to: 'EUR' }) as { isError: boolean; content: Array<{ text: string }> };
+        const result = await tools.convert_currency.fn({ amount: 100, from: 'USD', to: 'EUR' }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('All providers failed');
@@ -144,7 +144,7 @@ describe('get_exchange_rates tool', () => {
             timestamp: '', source: 'exchangerate-api', cached: false,
         });
 
-        const result = await tools.get_exchange_rates.fn({ base: 'USD' }) as { content: Array<{ text: string }> };
+        const result = await tools.get_exchange_rates.fn({ base: 'USD' }) as { content: { text: string }[] };
         const parsed = JSON.parse(result.content[0].text);
 
         expect(parsed.rates.EUR).toBe(0.92);
@@ -165,7 +165,7 @@ describe('get_exchange_rates tool', () => {
     it('returns error on failure', async () => {
         mockGetRates.mockRejectedValueOnce(new Error('Provider down'));
 
-        const result = await tools.get_exchange_rates.fn({ base: 'USD' }) as { isError: boolean; content: Array<{ text: string }> };
+        const result = await tools.get_exchange_rates.fn({ base: 'USD' }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('Provider down');
@@ -188,7 +188,7 @@ describe('get_historical_rate tool', () => {
 
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'INR', date: '2025-01-15',
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.rate).toBe(86.45);
@@ -206,7 +206,7 @@ describe('get_historical_rate tool', () => {
 
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'INR', startDate: '2025-01-01', endDate: '2025-01-10',
-        }) as { content: Array<{ text: string }> };
+        }) as { content: { text: string }[] };
 
         const parsed = JSON.parse(result.content[0].text);
         expect(parsed.change.changePct).toBe(0.94);
@@ -215,7 +215,7 @@ describe('get_historical_rate tool', () => {
     it('rejects same base and target', async () => {
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'USD', date: '2025-01-15',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('must be different');
@@ -224,7 +224,7 @@ describe('get_historical_rate tool', () => {
     it('rejects invalid date format', async () => {
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'EUR', date: '15-01-2025',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('invalid date format');
@@ -233,7 +233,7 @@ describe('get_historical_rate tool', () => {
     it('rejects future dates', async () => {
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'EUR', date: '2099-12-31',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('future');
@@ -242,7 +242,7 @@ describe('get_historical_rate tool', () => {
     it('rejects date range exceeding 365 days', async () => {
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'EUR', startDate: '2023-01-01', endDate: '2025-01-01',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('365 days');
@@ -251,7 +251,7 @@ describe('get_historical_rate tool', () => {
     it('rejects startDate after endDate', async () => {
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'EUR', startDate: '2025-06-01', endDate: '2025-01-01',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('startDate must be before');
@@ -260,7 +260,7 @@ describe('get_historical_rate tool', () => {
     it('requires date or startDate+endDate', async () => {
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'EUR',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('provide either');
@@ -271,7 +271,7 @@ describe('get_historical_rate tool', () => {
 
         const result = await tools.get_historical_rate.fn({
             base: 'USD', target: 'EUR', date: '2025-01-15',
-        }) as { isError: boolean; content: Array<{ text: string }> };
+        }) as { isError: boolean; content: { text: string }[] };
 
         expect(result.isError).toBe(true);
         expect(result.content[0].text).toContain('All providers failed');
