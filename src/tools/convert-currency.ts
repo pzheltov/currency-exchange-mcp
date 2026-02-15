@@ -46,7 +46,12 @@ export function registerConvertCurrency(server: McpServer): void {
 
                 const result = await convertCurrency(amount, fromResolved.code, toResolved.code);
 
-                await Actor.charge({ eventName: 'currency-convert' });
+                const chargeResult = await Actor.charge({ eventName: 'currency-convert' });
+                log.info('PPE charge', {
+                    event: 'currency-convert',
+                    chargedCount: chargeResult.chargedCount,
+                    limitReached: chargeResult.eventChargeLimitReached,
+                });
 
                 log.info(`Converted ${amount} ${fromResolved.code} → ${toResolved.code}: ${result.result}`);
 

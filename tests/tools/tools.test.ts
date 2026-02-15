@@ -9,7 +9,19 @@ vi.mock('../../src/providers/index.js', () => ({
 
 vi.mock('apify', () => ({
     log: { warning: vi.fn(), info: vi.fn(), error: vi.fn() },
-    Actor: { init: vi.fn(), charge: vi.fn(), exit: vi.fn() },
+    Actor: {
+        init: vi.fn(),
+        charge: vi.fn().mockResolvedValue({ chargedCount: 1, eventChargeLimitReached: false, chargeableWithinLimit: {} }),
+        exit: vi.fn(),
+        getChargingManager: vi.fn().mockReturnValue({
+            getPricingInfo: vi.fn().mockReturnValue({
+                isPayPerEvent: false,
+                pricingModel: undefined,
+                maxTotalChargeUsd: 0,
+                perEventPrices: {},
+            }),
+        }),
+    },
 }));
 
 import { Actor } from 'apify';

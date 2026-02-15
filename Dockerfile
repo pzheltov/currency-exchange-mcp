@@ -1,7 +1,5 @@
 FROM apify/actor-node:22 AS builder
 
-RUN npm ls @crawlee/core apify puppeteer playwright
-
 COPY --chown=myuser:myuser package*.json ./
 
 RUN npm install --include=dev --audit=false
@@ -11,8 +9,6 @@ COPY --chown=myuser:myuser . ./
 RUN npm run build
 
 FROM apify/actor-node:22
-
-RUN npm ls @crawlee/core apify puppeteer playwright
 
 COPY --chown=myuser:myuser package*.json ./
 

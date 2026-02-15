@@ -1,6 +1,6 @@
 # Currency Exchange & Crypto Rates MCP Server
 
-Real-time currency exchange rates and cryptocurrency prices via the Model Context Protocol. Convert between 60+ fiat currencies and 30+ cryptocurrencies with multi-source fallback, smart currency resolution, and historical rate lookups.
+A currency exchange MCP server for real-time forex rates and cryptocurrency prices via the Model Context Protocol. Convert between 60+ fiat currencies and 30+ cryptocurrencies — with multi-source failover, smart currency resolution, batch conversion, and historical rate lookups. No API keys needed for upstream data sources.
 
 ## Tools
 
@@ -279,3 +279,23 @@ apify push
 ```
 
 Configure [standby mode](https://docs.apify.com/platform/actors/development/programming-interface/standby) on the Apify platform after pushing.
+
+## FAQ
+
+**Do I need API keys for the upstream exchange rate providers?**
+No. All 5 data sources (ExchangeRate-API, fawazahmed0, Frankfurter, Coinbase, CoinGecko) are public and free. You only need an Apify API token for your deployed Actor.
+
+**How does multi-source failover work?**
+Each request tries the primary provider first. If it fails or times out, the server automatically retries with the fallback provider. Fiat: ExchangeRate-API → fawazahmed0. Crypto: Coinbase → CoinGecko. Historical: Frankfurter → fawazahmed0.
+
+**Can I convert between two cryptocurrencies (e.g., BTC to ETH)?**
+Yes. Crypto-to-crypto conversions use a USD cross-rate automatically.
+
+**What's the rate freshness?**
+Fiat rates update daily. Crypto rates are cached for 2 minutes. Historical rates are cached for 24 hours.
+
+**Are historical crypto rates supported?**
+No. The historical data sources (Frankfurter/ECB and fawazahmed0) only cover fiat currencies.
+
+**How do I run it locally?**
+`npm install && npm run start:dev` — the MCP endpoint will be available at `http://localhost:3000/mcp`.

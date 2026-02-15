@@ -32,7 +32,12 @@ export function registerGetExchangeRates(server: McpServer): void {
 
                 const result = await getRatesForBase(baseResolved.code, resolvedTargets);
 
-                await Actor.charge({ eventName: 'exchange-rates' });
+                const chargeResult = await Actor.charge({ eventName: 'exchange-rates' });
+                log.info('PPE charge', {
+                    event: 'exchange-rates',
+                    chargedCount: chargeResult.chargedCount,
+                    limitReached: chargeResult.eventChargeLimitReached,
+                });
 
                 log.info(`Exchange rates fetched for ${baseResolved.code}: ${Object.keys(result.rates).length} pairs`);
 

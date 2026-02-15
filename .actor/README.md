@@ -1,8 +1,8 @@
 # Currency Exchange & Crypto Rates MCP Server
 
-Convert between 60+ fiat currencies and 30+ cryptocurrencies in real time. This MCP server provides reliable exchange rates with automatic failover across multiple data sources — no API keys required.
+A forex MCP server and currency exchange API for real-time exchange rates, cryptocurrency prices, and currency conversion. Convert between 60+ fiat currencies and 30+ cryptocurrencies — including bitcoin price lookups, batch forex conversions, and historical rate data. Multi-source failover across 5 providers with zero API keys required.
 
-## What It Does
+## Real-Time Currency Conversion & Exchange Rates
 
 Connect this MCP server to any AI agent (Claude, GPT, custom agents) and give it the ability to:
 
@@ -13,7 +13,7 @@ Connect this MCP server to any AI agent (Claude, GPT, custom agents) and give it
 
 Works with natural language input — say "dollars", "bitcoin", or "rupees" instead of memorizing currency codes.
 
-## Why This Server
+## Why Choose This Currency Exchange API
 
 | Feature | This Server | Typical Free APIs |
 |---------|-------------|-------------------|
@@ -82,7 +82,7 @@ Historical rates for a single date or date range (max 365 days) with change stat
 - Medium usage (1,000 conversions/month): ~$5.00
 - Heavy usage (10,000 conversions/month): ~$50.00
 
-## Use Cases
+## Supported Use Cases
 
 - **Travel apps** — Show live exchange rates for destination currencies
 - **Trading bots** — Get real-time crypto prices with fiat equivalents
@@ -100,9 +100,13 @@ Historical rates for a single date or date range (max 365 days) with change stat
 - **Date ranges capped at 365 days**
 - Precision: 6 decimal places (standard for display, not for high-frequency trading)
 
-## How to Connect
+## Getting Started
 
-Use the MCP endpoint URL from your Actor deployment:
+1. **Deploy the Actor** — Push to Apify and enable [standby mode](https://docs.apify.com/platform/actors/development/programming-interface/standby).
+2. **Get your endpoint** — Your MCP endpoint will be `https://<your-actor>.apify.actor/mcp`.
+3. **Connect your AI agent** — Point any MCP-compatible client (Claude Desktop, Cursor, Cline, custom agents) at the endpoint.
+4. **Add authentication** — Include your Apify API token in the `Authorization: Bearer` header.
+5. **Start converting** — Call any of the 4 tools using natural language currency names or ISO codes.
 
 ```
 POST https://<your-actor>.apify.actor/mcp
@@ -111,3 +115,29 @@ Content-Type: application/json
 ```
 
 The server uses the standard MCP JSON-RPC 2.0 protocol — compatible with any MCP client.
+
+## Frequently Asked Questions
+
+**What currencies does this exchange rate API support?**
+Over 60 fiat currencies (USD, EUR, GBP, JPY, INR, AED, SAR, and more) plus 30 cryptocurrencies (BTC, ETH, SOL, DOGE, XRP, and more). See the full list in the Supported Currencies section above.
+
+**Do I need an API key to get forex rates?**
+No. All upstream data sources are public and free. You only need an Apify API token to authenticate with your deployed Actor — no third-party API keys required.
+
+**How fresh are the exchange rates?**
+Fiat rates update daily via ExchangeRate-API. Crypto rates (bitcoin, ethereum, etc.) are cached for 2 minutes via Coinbase and CoinGecko.
+
+**Can I convert bitcoin to other cryptocurrencies?**
+Yes. Crypto-to-crypto conversions (e.g., BTC to ETH) are handled automatically via a USD cross-rate.
+
+**Does this currency converter API support historical rates?**
+Yes. The `get_historical_rate` tool returns rates for a specific date or a date range (up to 365 days) with high, low, average, and percentage change statistics. Historical data covers ECB-supported fiat currencies.
+
+**What happens if one data source goes down?**
+The server automatically fails over to a backup provider. Fiat rates fall back from ExchangeRate-API to fawazahmed0, and crypto rates fall back from Coinbase to CoinGecko.
+
+**Can I use natural language instead of currency codes?**
+Yes. Say "dollars", "bitcoin", "rupees", or "yen" instead of USD, BTC, INR, or JPY. The smart currency resolver handles common names, abbreviations, and slang.
+
+**Is there a free tier or trial?**
+Pricing is pay-per-event with no monthly minimums. A single conversion costs $0.005 — try it with just a few calls to evaluate.

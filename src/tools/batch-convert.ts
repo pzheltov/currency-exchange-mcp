@@ -59,7 +59,12 @@ export function registerBatchConvert(server: McpServer): void {
                     }),
                 );
 
-                await Actor.charge({ eventName: 'batch-convert' });
+                const chargeResult = await Actor.charge({ eventName: 'batch-convert' });
+                log.info('PPE charge', {
+                    event: 'batch-convert',
+                    chargedCount: chargeResult.chargedCount,
+                    limitReached: chargeResult.eventChargeLimitReached,
+                });
 
                 const batchResult: BatchConversionResult = {
                     amount,

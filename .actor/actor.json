@@ -7,11 +7,10 @@
     "buildTag": "latest",
     "usesStandbyMode": true,
     "categories": ["DEVELOPER_TOOLS"],
-    "seoTitle": "Currency Exchange & Crypto Rates MCP Server - Real-Time Forex & Bitcoin Prices",
-    "seoDescription": "MCP server for real-time currency conversion, exchange rates, and historical data. Supports 60+ fiat currencies (USD, EUR, GBP, INR, AED) and 30+ cryptocurrencies (BTC, ETH, SOL). Multi-source fallback with zero API keys required. Pay-per-use pricing starting at $0.005.",
+    "seoTitle": "Currency Exchange & Crypto Rates MCP Server",
+    "seoDescription": "Convert 60+ fiat currencies and 30+ cryptocurrencies in real time. Forex rates, crypto prices, historical data, and batch conversion. No API keys required.",
     "meta": {
-        "templateId": "ts-mcp-empty",
-        "generatedBy": "claude-code"
+        "templateId": "ts-mcp-empty"
     },
     "input": {
         "title": "Actor input schema",

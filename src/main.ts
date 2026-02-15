@@ -9,6 +9,15 @@ import { registerAllTools } from './tools/index.js';
 
 await Actor.init();
 
+const chargingManager = Actor.getChargingManager();
+const pricingInfo = chargingManager.getPricingInfo();
+log.info('PPE pricing info', {
+    isPayPerEvent: pricingInfo.isPayPerEvent,
+    pricingModel: pricingInfo.pricingModel,
+    maxTotalChargeUsd: pricingInfo.maxTotalChargeUsd,
+    perEventPrices: pricingInfo.perEventPrices,
+});
+
 const SERVER_NAME = 'currency-exchange-mcp';
 const SERVER_VERSION = '1.0.0';
 

@@ -93,7 +93,12 @@ export function registerGetHistoricalRate(server: McpServer): void {
                     { date, startDate, endDate },
                 );
 
-                await Actor.charge({ eventName: 'historical-rate' });
+                const chargeResult = await Actor.charge({ eventName: 'historical-rate' });
+                log.info('PPE charge', {
+                    event: 'historical-rate',
+                    chargedCount: chargeResult.chargedCount,
+                    limitReached: chargeResult.eventChargeLimitReached,
+                });
 
                 log.info(`Historical rate fetched: ${baseResolved.code}→${targetResolved.code}`);
 

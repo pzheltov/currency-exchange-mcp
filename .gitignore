@@ -1,6 +1,7 @@
 .idea
 .vscode
 .zed
+.claude
 storage
 apify_storage
 crawlee_storage
