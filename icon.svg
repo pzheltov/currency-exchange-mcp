@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="80" y1="80" x2="432" y2="432" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="50%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#F472B6"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#6EE7B7"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#FBBF24"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Circular exchange ring (top-right arc) -->
+  <path d="M 256 72 A 184 184 0 0 1 440 256" stroke="url(#ring)" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <polygon points="430,228 454,260 418,260" fill="#38BDF8"/>
+
+  <!-- Circular exchange ring (bottom-left arc) -->
+  <path d="M 256 440 A 184 184 0 0 1 72 256" stroke="url(#ring)" stroke-width="11" fill="none" stroke-linecap="round"/>
+  <polygon points="82,284 58,252 94,252" fill="#F472B6"/>
+
+  <!-- Dollar sign (left side) - built from paths -->
+  <g transform="translate(152, 210)">
+    <!-- S shape -->
+    <path d="M 38,8 C 18,8 4,18 4,32 C 4,46 18,54 34,58 C 50,62 64,68 64,84 C 64,100 48,110 28,110"
+          stroke="url(#green)" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <!-- Vertical line through dollar -->
+    <line x1="34" y1="0" x2="34" y2="118" stroke="url(#green)" stroke-width="8" stroke-linecap="round"/>
+  </g>
+
+  <!-- Bitcoin B (right side) - built from paths -->
+  <g transform="translate(308, 210)">
+    <!-- Vertical line left -->
+    <line x1="10" y1="4" x2="10" y2="114" stroke="url(#gold)" stroke-width="9" stroke-linecap="round"/>
+    <!-- Top bump of B -->
+    <path d="M 10,12 L 36,12 C 56,12 62,24 62,34 C 62,46 54,56 36,56 L 10,56"
+          stroke="url(#gold)" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Bottom bump of B (wider) -->
+    <path d="M 10,56 L 40,56 C 64,56 70,68 70,80 C 70,94 60,106 40,106 L 10,106"
+          stroke="url(#gold)" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Top tick -->
+    <line x1="22" y1="0" x2="22" y2="12" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+    <line x1="42" y1="0" x2="42" y2="12" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+    <!-- Bottom tick -->
+    <line x1="22" y1="106" x2="22" y2="118" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+    <line x1="42" y1="106" x2="42" y2="118" stroke="url(#gold)" stroke-width="7" stroke-linecap="round"/>
+  </g>
+
+  <!-- Center exchange arrows -->
+  <g transform="translate(230, 252)">
+    <!-- Right arrow -->
+    <line x1="0" y1="0" x2="44" y2="0" stroke="#38BDF8" stroke-width="7" stroke-linecap="round"/>
+    <polygon points="38,-9 52,0 38,9" fill="#38BDF8"/>
+    <!-- Left arrow -->
+    <line x1="52" y1="20" x2="8" y2="20" stroke="#34D399" stroke-width="7" stroke-linecap="round"/>
+    <polygon points="14,11 0,20 14,29" fill="#34D399"/>
+  </g>
+</svg>
