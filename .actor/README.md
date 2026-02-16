@@ -43,26 +43,26 @@ All upstream APIs are public and free. No API keys, no signup, no rate limit sur
 
 ## Tools
 
-### `convert_currency` — $0.005 per call
+### `convert_currency` — $0.003 per call
 Convert an amount between any fiat or crypto pair.
 ```json
 { "amount": 100, "from": "USD", "to": "INR" }
 { "amount": 1, "from": "bitcoin", "to": "rupees" }
 ```
 
-### `batch_convert` — $0.01 per call
+### `batch_convert` — $0.008 per call
 Convert one amount to multiple currencies at once. More cost-effective than multiple single conversions.
 ```json
 { "amount": 1000, "from": "USD", "to": ["EUR", "GBP", "INR", "JPY", "BTC"] }
 ```
 
-### `get_exchange_rates` — $0.005 per call
+### `get_exchange_rates` — $0.003 per call
 Get rates for a base currency against multiple targets (default: top 20 currencies).
 ```json
 { "base": "BTC", "targets": ["USD", "EUR", "INR", "GBP"] }
 ```
 
-### `get_historical_rate` — $0.01 per call
+### `get_historical_rate` — $0.008 per call
 Historical rates for a single date or date range (max 365 days) with change statistics.
 ```json
 { "base": "USD", "target": "EUR", "startDate": "2025-01-01", "endDate": "2025-06-30" }
@@ -72,15 +72,15 @@ Historical rates for a single date or date range (max 365 days) with change stat
 
 | Event | Price (USD) | Description |
 |-------|-------------|-------------|
-| Currency conversion | $0.005 | Single pair conversion |
-| Batch conversion | $0.01 | Convert to up to 50 currencies at once |
-| Exchange rates | $0.005 | Rates for base against multiple targets |
-| Historical rate | $0.01 | Single date or time-series with statistics |
+| Currency conversion | $0.003 | Single pair conversion |
+| Batch conversion | $0.008 | Convert to up to 50 currencies at once |
+| Exchange rates | $0.003 | Rates for base against multiple targets |
+| Historical rate | $0.008 | Single date or time-series with statistics |
 
 **Example monthly costs:**
-- Light usage (100 conversions/month): ~$0.50
-- Medium usage (1,000 conversions/month): ~$5.00
-- Heavy usage (10,000 conversions/month): ~$50.00
+- Light usage (100 conversions/month): ~$0.30
+- Medium usage (1,000 conversions/month): ~$3.00
+- Heavy usage (10,000 conversions/month): ~$30.00
 
 ## Supported Use Cases
 
@@ -140,4 +140,4 @@ The server automatically fails over to a backup provider. Fiat rates fall back f
 Yes. Say "dollars", "bitcoin", "rupees", or "yen" instead of USD, BTC, INR, or JPY. The smart currency resolver handles common names, abbreviations, and slang.
 
 **Is there a free tier or trial?**
-Pricing is pay-per-event with no monthly minimums. A single conversion costs $0.005 — try it with just a few calls to evaluate.
+Pricing is pay-per-event with no monthly minimums. A single conversion costs $0.003 — try it with just a few calls to evaluate.

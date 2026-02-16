@@ -1,5 +1,10 @@
 # Currency Exchange & Crypto Rates MCP Server
 
+[![GitHub stars](https://img.shields.io/github/stars/Ruddxxy/currency-exchange-mcp)](https://github.com/Ruddxxy/currency-exchange-mcp)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
+[![Node.js >= 20](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
+[![CI](https://github.com/Ruddxxy/currency-exchange-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/Ruddxxy/currency-exchange-mcp/actions)
+
 A currency exchange MCP server for real-time forex rates and cryptocurrency prices via the Model Context Protocol. Convert between 60+ fiat currencies and 30+ cryptocurrencies — with multi-source failover, smart currency resolution, batch conversion, and historical rate lookups. No API keys needed for upstream data sources.
 
 ## Tools
@@ -222,10 +227,10 @@ All upstream APIs are zero-auth (no API keys required).
 
 | Event | Description | Price (USD) |
 |-------|-------------|-------------|
-| `currency-convert` | Single pair conversion | $0.005 |
-| `batch-convert` | Convert to up to 50 currencies at once | $0.01 |
-| `exchange-rates` | Exchange rates lookup | $0.005 |
-| `historical-rate` | Historical rate lookup | $0.01 |
+| `currency-convert` | Single pair conversion | $0.003 |
+| `batch-convert` | Convert to up to 50 currencies at once | $0.008 |
+| `exchange-rates` | Exchange rates lookup | $0.003 |
+| `historical-rate` | Historical rate lookup | $0.008 |
 
 ## Limitations
 
@@ -270,6 +275,25 @@ npm run start:dev
 ```
 
 Server starts at `http://localhost:3000/mcp`.
+
+## Connect to Your AI Client
+
+Add this to your MCP client config (Claude Desktop, Cline, Cursor, etc.):
+
+```json
+{
+  "mcpServers": {
+    "currency-exchange": {
+      "url": "https://vector384--currency-exchange-mcp.apify.actor/mcp",
+      "headers": {
+        "Authorization": "Bearer YOUR_APIFY_API_TOKEN"
+      }
+    }
+  }
+}
+```
+
+Replace `YOUR_APIFY_API_TOKEN` with your [Apify API token](https://console.apify.com/account/integrations).
 
 ## Deployment
 
