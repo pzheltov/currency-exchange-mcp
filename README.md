@@ -278,7 +278,9 @@ Server starts at `http://localhost:3000/mcp`.
 
 ## Connect to Your AI Client
 
-Add this to your MCP client config (Claude Desktop, Cline, Cursor, etc.):
+### Hosted (Apify) — remote HTTP
+
+For clients that support remote MCP over HTTP (Cursor, Cline, etc.):
 
 ```json
 {
@@ -294,6 +296,50 @@ Add this to your MCP client config (Claude Desktop, Cline, Cursor, etc.):
 ```
 
 Replace `YOUR_APIFY_API_TOKEN` with your [Apify API token](https://console.apify.com/account/integrations).
+
+### Local (stdio) — spin up on demand
+
+Claude Desktop spawns a subprocess per session and shuts it down when the chat ends — no background server, no Apify account, no token. Add to `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "currency-exchange": {
+      "command": "npx",
+      "args": ["-y", "currency-exchange-mcp"]
+    }
+  }
+}
+```
+
+To run from a local checkout instead of npm:
+
+```json
+{
+  "mcpServers": {
+    "currency-exchange": {
+      "command": "node",
+      "args": ["/absolute/path/to/currency-exchange-mcp/dist/stdio.js"]
+    }
+  }
+}
+```
+
+(Run `npm install && npm run build` first.) Billing is skipped in stdio mode since there's no Apify session to charge.
+
+Logs go to stderr by default (Claude Desktop captures it). To send them to a file instead, set `MCP_LOG_FILE` in the `env` block of the config:
+
+```json
+{
+  "mcpServers": {
+    "currency-exchange": {
+      "command": "npx",
+      "args": ["-y", "currency-exchange-mcp"],
+      "env": { "MCP_LOG_FILE": "/tmp/currency-exchange-mcp.log" }
+    }
+  }
+}
+```
 
 ## Deployment
 
